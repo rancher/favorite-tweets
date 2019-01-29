@@ -1,0 +1,22 @@
+{
+  "name": "@rancher/favorite-tweets",
+  "version": "1.0.0",
+  "description": "Get favorited tweets and serve as JSON",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rancher/favorite-tweets.git"
+  },
+  "author": "Vincent Fiduccia <vincent@rancher.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/rancher/favorite-tweets/issues"
+  },
+  "homepage": "https://github.com/rancher/favorite-tweets#readme",
+  "dependencies": {
+    "request": "^2.88.0"
+  }
+}
