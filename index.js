@@ -43,6 +43,8 @@ server.listen(PORT, function(err) {
 });
 
 function handle(req, res, retry=true) {
+  console.log(`Request from ${req.socket.localAddress}`);
+
   getTweets(lastToken, function(err, tweets) {
     if ( err ) {
       if ( retry ) {
@@ -66,7 +68,7 @@ function handle(req, res, retry=true) {
 function respondSuccess(req, res, data) {
   res.setHeader('Content-Type','application/json');
   res.statusCode = 200;
-  const out = JSON.stringify(data, null, 2);
+  let out = (typeof data === 'string' ? data : JSON.stringify(data, null, 2));
   res.end(out);
   console.log(`Sent ${out.length} bytes to ${req.socket.localAddress}`);
 }
@@ -136,9 +138,10 @@ function getTweets(token, cb) {
       try {
         const obj = JSON.parse(body);
         console.log('Got new tweets');
+        let serialized = JSON.stringify(obj, null, 2);
         lastUpdated = (new Date()).getTime();
-        lastResponse = obj;
-        return cb(null, obj);
+        lastResponse = serialized;
+        return cb(null, serialized);
       } catch (err) {
         return cb(err);
       }
