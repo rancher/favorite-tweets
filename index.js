@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const http = require('http');
 const request = require('request');
 const PORT = process.env.PORT || 80;
@@ -5,7 +7,8 @@ const USERNAME = process.env.USERNAME || 'Rancher_Labs';
 const CONSUMER = process.env.TWITTER_CONSUMER;
 const SECRET = process.env.TWITTER_SECRET;
 let lastToken;
-
+let lastUpdated;
+let lastResponse;
 
 if ( !USERNAME ) {
   console.error('Must specify USERNAME in environment');
@@ -112,6 +115,14 @@ function getToken(cb) {
 }
 
 function getTweets(token, cb) {
+  if ( lastUpdated ) {
+    const now = (new Date()).getTime();
+    if ( lastUpdated + (30 * 60 * 1000) > now ) {
+      console.log('Returning from cache');
+      return cb(null, lastResponse);
+    }
+  }
+
   request.get(`https://api.twitter.com/1.1/favorites/list.json?count=12&screen_name=${USERNAME}`, {
     auth: {
       bearer: token
@@ -125,6 +136,8 @@ function getTweets(token, cb) {
       try {
         const obj = JSON.parse(body);
         console.log('Got new tweets');
+        lastUpdated = (new Date()).getTime();
+        lastResponse = obj;
         return cb(null, obj);
       } catch (err) {
         return cb(err);

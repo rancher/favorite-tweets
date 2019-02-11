@@ -1,6 +1,6 @@
 {
   "name": "@rancher/favorite-tweets",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Get favorited tweets and serve as JSON",
   "main": "index.js",
   "scripts": {
